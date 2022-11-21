@@ -1,5 +1,6 @@
 import 'package:emobile/pages/registrar_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,7 +25,9 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
 
                 children: [
-                  const Text(
+                   Text("Hola ${FirebaseAuth.instance.currentUser?.email}"),
+
+                    const Text(
                     'Nombre POI',
                     textAlign: TextAlign.justify,
                     overflow: TextOverflow.ellipsis,

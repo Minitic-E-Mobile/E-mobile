@@ -1,4 +1,5 @@
 import 'package:emobile/pages/login_page.dart';
+import 'package:emobile/repositorio/usuario_registrar.dart';
 import 'package:flutter/material.dart';
 
 class RegistrarPage extends StatefulWidget {
@@ -9,6 +10,37 @@ class RegistrarPage extends StatefulWidget {
 }
 
 class _RegistrarPageState extends State<RegistrarPage> {
+
+  final email=TextEditingController();
+  final password=TextEditingController();
+  final passwordConf=TextEditingController();
+
+  Usuario_Registrar usuario=Usuario_Registrar();
+
+  void mostrarMensaje(String mensaje){
+    final pantalla=ScaffoldMessenger.of(context);
+    pantalla.showSnackBar(
+        SnackBar(
+          content: Text(mensaje, style: const TextStyle(fontSize: 16),),
+          backgroundColor: Color(0xFFD50000),
+          duration: const Duration(seconds: 10),
+
+        )
+    );
+  }
+  
+  
+  void guardarUsuario() async{
+    if(password.text == passwordConf.text) {
+      bool resultado = await usuario.registrarUsuario(
+          email.text, password.text);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }else{
+      mostrarMensaje("Las Contraseñas no coniciden");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,17 +60,19 @@ class _RegistrarPageState extends State<RegistrarPage> {
                 child: const Image(image: AssetImage("assets/Logo.png"), width: 140, height: 140),
               ),
               TextFormField(
+                controller: email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                     labelText: "Correo Electronico",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.person)
+                    suffixIcon: Icon(Icons.email)
                 ),
               ),
               const SizedBox(
                 height: 15,
               ),
               TextFormField(
+                controller: password,
                 obscureText: true,
                 decoration: const InputDecoration(
                     labelText: "Contraseña",
@@ -50,6 +84,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
                 height: 15,
               ),
               TextFormField(
+                controller: passwordConf,
                 obscureText: true,
                 decoration: const InputDecoration(
                     labelText: "Repetir Contraseña",
@@ -62,7 +97,7 @@ class _RegistrarPageState extends State<RegistrarPage> {
               ),
               ElevatedButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                    guardarUsuario();
                   },
                   child: const Text("Registrar")
               )
